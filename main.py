@@ -1,12 +1,29 @@
+
+"""
+All of the necessary imports and setup
+"""
 from bs4 import BeautifulSoup
+# from mpl_toolkits.basemap import Basemap
 import nltk
 import operator
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
+"""
+This part returns the data from the Sandbox main website
+"""
 text = open("database.txt", "r")
 lines = text.read().splitlines()
 
+"""
+This part creates the visualization for people's occupations
+"""
+stop_words = stopwords.words('english')
+
+"""
+This part creates the visualizations for people's skillsets
+"""
 helpful_skills = []
 for line in lines:
 	if line[0:14] == 'Can help with:':
@@ -26,18 +43,29 @@ if '' in skill_count:
 	skill_count.pop('', None)
 
 sorted_skills = sorted(skill_count.items(), key=operator.itemgetter(1))
-# top_skills = {}
-# sorted_skills_list = list(sorted_skills)
-# print(sorted_skills)
-# for i in range(20):
-# 	top_skills[sorted_skills_list[i][0]] = sorted_skills_list[i][1]
+top_skills = []
+sorted_skills_list = list(sorted_skills)
 
-# print(top_skills)
-skills = list(zip(*sorted_skills))[0]
-occurence = list(zip(*sorted_skills))[1]
-skill_pos = np.arange(len(skills))
+for i in range(20):
+	newArr = [sorted_skills_list[-i-1][0], sorted_skills_list[-i-1][1]]
+	top_skills.append(newArr)
 
-plt.bar(skill_pos, occurence, align='center')
-plt.xticks(skill_pos, skills)
-plt.ylabel('frequency')
+barWidth = 0.9
+X = [x + 1 for x in list(range(20))]
+Y = [elem[1] for elem in top_skills]
+x_labels = [elem[0] for elem in top_skills]
+plt.bar(X, Y, width=barWidth, color=(0.3, 0.1, 0.4, 0.6))
+plt.xticks([r + barWidth for r in range(20)], x_labels, rotation=90)
+labels = [ 'n = ' + str(y) for y in Y]
+for i in range(20):
+	plt.text(x = X[i]-0.5, y = Y[i]+0.1, s=labels[i])
+plt.subplots_adjust(bottom=0.2, top=0.98)
 plt.show()
+
+"""
+This part creates the visualization for where people are from
+"""
+
+
+# Create the map with all of the sandbox hubs
+# data = pd.DataFrame
