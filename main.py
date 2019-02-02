@@ -65,6 +65,16 @@ def skillset_vis(lines):
 	plt.show()
 
 """
+This part creates the visualization for what people do as a profession
+"""
+def profession_visualization(lines):
+	professions = []
+	for line in lines:
+		line = line.split()
+		if line[-1][-1] == ')' or line[0] == 'Linkedin' or line[0] == 'Slack'or line[0] == 'Can':
+			
+
+"""
 This part creates the visualization for where people are from
 """
 def places_visualization(lines):
