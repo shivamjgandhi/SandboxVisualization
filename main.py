@@ -87,7 +87,23 @@ def profession_visualization(lines):
 
     most_common_professions = {}
     for word in cleaned_bag_of_words:
-        if 
+        if word.lower() in most_common_professions:
+            most_common_professions[word.lower()] += 1
+        else:
+            most_common_professions[word.lower()] = 1
+
+    if '' in most_common_professions:
+        most_common_professions.pop('', None)
+
+    sorted_professions = sorted(most_common_professions.items(), key=operator.itemgetter(1))
+    top_professions = []
+    sorted_professions_list = list(sorted_professions)
+
+    for i in range(20):
+        newArr = [sorted_professions_list[-i - 1][0], sorted_professions_list[-i - 1][1]]
+        top_professions.append(newArr)
+
+    print(top_professions)
 
 """
 This part creates the visualization for where people are from
@@ -95,7 +111,6 @@ This part creates the visualization for where people are from
 
 
 def places_visualization(lines):
-    lines = lines[:-2]
     places_list = []
     for line in lines:
         line = line.split()
@@ -109,7 +124,7 @@ def places_visualization(lines):
 
     city_count = {}
     for i in range(len(places_list)):
-        if (places_list[i] in city_count):
+        if places_list[i] in city_count:
             city_count[places_list[i]] += 1
         else:
             city_count[places_list[i]] = 1
