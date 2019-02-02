@@ -22,7 +22,6 @@ lines = text.read().splitlines()
 This part creates the visualizations for people's skillsets
 """
 
-
 def skillset_vis(lines):
     helpful_skills = []
     for line in lines:
@@ -154,4 +153,4 @@ def places_visualization(lines):
 # Create the map with all of the sandbox hubs
 # data = pd.DataFrame
 
-profession_visualization(lines)
+skillset_vis(lines)
