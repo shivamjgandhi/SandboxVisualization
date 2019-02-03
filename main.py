@@ -12,6 +12,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from nltk.tokenize import RegexpTokenizer
+tokenizer = RegexpTokenizer(r'\w+')
+
+alphabet = 'qwertyuiopasdfghjklzxcvbnm'
+
 """
 This part returns the data from the Sandbox main website
 """
@@ -68,18 +73,25 @@ def skillset_vis(lines):
 """
 This part creates the visualization for what people do as a profession
 """
+def profession_word_cleaning(word):
+    if tokenizer.tokenize(word) == []:
+        return ""
+    else:
+        return tokenizer.tokenize(word)[0].lower()
 
 
 def profession_visualization(lines):
-    professions = []
     bag_of_words = []
     for line in lines:
         split_line = line.split()
-        if split_line[-1][-1] != ')' and split_line[0] != 'Linkedin' and split_line[0] != 'Slack' and split_line[0] != 'Can':
-            professions += [x.strip() for x in line.split(',')]
-            for word in split_line:
-                if word not in bag_of_words:
-                    bag_of_words += [word]
+        if split_line[-1][-1] != ')' and split_line[0] != 'Linkedin' and split_line[0] != 'Slack' and split_line[0] != 'Can' and split_line[0] != 'Linked:' and split_line[0] != 'Slack:':
+            if '.' in line:
+                cleaned_line = line.split('.')[0].split()
+            else:
+                cleaned_line = line.split()
+            for word in cleaned_line:
+                if profession_word_cleaning(word) != "":
+                    bag_of_words += [profession_word_cleaning(word)]
 
     cleaned_bag_of_words = []
     for word in bag_of_words:
@@ -87,24 +99,38 @@ def profession_visualization(lines):
             cleaned_bag_of_words += [word]
 
     most_common_professions = {}
-    for word in cleaned_bag_of_words:
-        if word.lower() in most_common_professions:
-            most_common_professions[word.lower()] += 1
+    for i in range(len(cleaned_bag_of_words)):
+        if cleaned_bag_of_words[i] in most_common_professions:
+            most_common_professions[cleaned_bag_of_words[i]] += 1
         else:
-            most_common_professions[word.lower()] = 1
-
-    if '' in most_common_professions:
-        most_common_professions.pop('', None)
+            most_common_professions[cleaned_bag_of_words[i]] = 1
 
     sorted_professions = sorted(most_common_professions.items(), key=operator.itemgetter(1))
     top_professions = []
     sorted_professions_list = list(sorted_professions)
 
-    for i in range(20):
+    for i in range(30):
         newArr = [sorted_professions_list[-i - 1][0], sorted_professions_list[-i - 1][1]]
         top_professions.append(newArr)
 
-    print(top_professions)
+    remove = [1, 5, 10, 11, 12, 13, 14, 16, 23, 24, 26, 29]
+    count = 0
+    for index in remove:
+        del top_professions[index - count]
+        count += 1
+
+    barWidth = 0.9
+    X = [x + 1 for x in list(range(len(top_professions)))]
+    Y = [elem[1] for elem in top_professions]
+    x_labels = [elem[0] for elem in top_professions]
+
+    plt.bar(X, Y, width=barWidth, color=(0.3, 0.1, 0.4, 0.6))
+    plt.xticks([r + barWidth for r in range(len(top_professions))], x_labels, rotation=90)
+    labels = ['n = ' + str(y) for y in Y]
+    for i in range(len(top_professions)):
+        plt.text(x=X[i] - 0.5, y=Y[i] + 0.1, s=labels[i])
+    plt.subplots_adjust(bottom=0.2, top=0.98)
+    plt.show()
 
 """
 This part creates the visualization for where people are from
@@ -155,4 +181,4 @@ def places_visualization(lines):
 # Create the map with all of the sandbox hubs
 # data = pd.DataFrame
 
-skillset_vis(lines)
+profession_visualization(lines)
