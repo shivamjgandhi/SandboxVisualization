@@ -160,25 +160,21 @@ def places_visualization(lines):
     top_locations = []
     sorted_locations_list = list(sorted_locations)
 
-    for i in range(10):
+    for i in range(45):
         newArr = [sorted_locations_list[-i - 1][0], sorted_locations_list[-i - 1][1]]
         top_locations.append(newArr)
 
     barWidth = 0.9
-    X = [x + 1 for x in list(range(10))]
+    X = [x + 1 for x in list(range(45))]
     Y = [elem[1] for elem in top_locations]
     x_labels = [elem[0] for elem in top_locations]
 
     plt.bar(X, Y, width=barWidth, color=(0.3, 0.1, 0.4, 0.6))
-    plt.xticks([r + barWidth for r in range(10)], x_labels, rotation=90)
+    plt.xticks([r + barWidth for r in range(45)], x_labels, rotation=90)
     labels = ['n = ' + str(y) for y in Y]
-    for i in range(10):
+    for i in range(45):
         plt.text(x=X[i] - 0.5, y=Y[i] + 0.1, s=labels[i])
     plt.subplots_adjust(bottom=0.2, top=0.98)
     plt.show()
 
-
-# Create the map with all of the sandbox hubs
-# data = pd.DataFrame
-
-profession_visualization(lines)
+places_visualization(lines)
