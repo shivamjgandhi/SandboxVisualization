@@ -45,19 +45,21 @@ def skillset_vis(lines):
     top_skills = []
     sorted_skills_list = list(sorted_skills)
 
-    for i in range(20):
+    for i in range(50):
         newArr = [sorted_skills_list[-i - 1][0], sorted_skills_list[-i - 1][1]]
         top_skills.append(newArr)
 
     barWidth = 0.9
-    X = [x + 1 for x in list(range(20))]
+    X = [x + 1 for x in list(range(50))]
     Y = [elem[1] for elem in top_skills]
     x_labels = [elem[0] for elem in top_skills]
 
+    print(len(sorted_skills))
+
     plt.bar(X, Y, width=barWidth, color=(0.3, 0.1, 0.4, 0.6))
-    plt.xticks([r + barWidth for r in range(20)], x_labels, rotation=90)
+    plt.xticks([r + barWidth for r in range(50)], x_labels, rotation=90)
     labels = ['n = ' + str(y) for y in Y]
-    for i in range(20):
+    for i in range(50):
         plt.text(x=X[i] - 0.5, y=Y[i] + 0.1, s=labels[i])
     plt.subplots_adjust(bottom=0.2, top=0.98)
     plt.show()
